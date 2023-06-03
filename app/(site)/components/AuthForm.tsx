@@ -1,17 +1,20 @@
 'use client';
-import { useCallback, useState } from 'react'
-import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
-import Input from '@/app/components/inputs/Input'
-import Button from '@/app/components/Button'
-import AuthSocialButton from './AuthSocialButton'
-import { BsGithub, BsGoogle } from 'react-icons/bs'
-import axios from 'axios'
-import toast from 'react-hot-toast'
-import { signIn } from 'next-auth/react'
+import { useCallback, useEffect, useState } from "react";
+import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
+import Input from "@/app/components/inputs/Input";
+import Button from "@/app/components/Button";
+import AuthSocialButton from "./AuthSocialButton";
+import { BsGithub, BsGoogle } from "react-icons/bs";
+import axios from "axios";
+import toast from "react-hot-toast";
+import { signIn, useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 type Variant = 'login' | 'register';
 
 export default function AuthForm() {
+  const session = useSession();
+  const router = useRouter();
   const [variant, setVariant] = useState<Variant>('login');
   const [isLoading, setIsLoading] = useState(false);
   const toggleVariant = useCallback(() => {
@@ -21,6 +24,12 @@ export default function AuthForm() {
       setVariant('login');
     }
   }, [variant]);
+
+  useEffect(() => {
+    if (session?.status === 'authenticated') {
+      router.push('/users');
+    }
+  }, [session?.status, router]);
 
   const {
     register,
@@ -38,41 +47,51 @@ export default function AuthForm() {
     setIsLoading(true);
     if (variant === 'register') {
       axios
-        .post('/api/register', data)
+        .pos"/api/register"r', data)
+        .then(() =>
+          signI"credentials"s', {
+            ...data,
+            redirect: fale,
+          })
+        )
         .catch(() => {
-          toast.error('Something went wrong, please try again ater');
+          toast.erro"Something went wrong, please try again ater"r');
         })
         .finally(() => {
-          setIsLoading(false;
-        });    }
+          setIsLoading(false);
+        });
+    }
     if (variant === 'login') {
       signIn('credentials', {
         ...data,
-        redirect: false,
+        redirect: false
       })
         .then((callback) => {
-          if (callback?.error) toast.error('Invalid Credentials')
-          if (callback?.ok && !callback?.error) toast.success('Logged In')
+          if (callback?.error) toast.error("Invalid Credentials");
+          if (callback?.ok && !callback?.error) {
+            toast.success("Logged In");
+            router.push("/users");
+          }
         })
         .finally(() => {
-          setIsLoading(false)
-        })
+          setIsLoading(false);
+        });
     }
   };
 
   const socialAction = (action: string) => {
-    setIsLoading(true)
+    setIsLoading(true);
     signIn(action, {
-      redirect: false,
+      redirect: false
     })
       .then((callback) => {
         if (callback?.error)
-          toast.error('Something went wrong, please try again later')
-        if (callback?.ok && !callback?.error) toast.success('Logged In')
+          toast.error("Something went wrong, please try again later");
+        if (callback?.ok && !callback?.error) toast.success("Logged In");
       })
       .finally(() => {
-        setIsLoading(false)
-      })
+        setIsLoading(false);
+      });
   };
 
   return (
