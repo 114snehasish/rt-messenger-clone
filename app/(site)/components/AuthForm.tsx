@@ -1,14 +1,14 @@
 'use client';
-import { useCallback, useEffect, useState } from "react";
-import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
-import Input from "@/app/components/inputs/Input";
-import Button from "@/app/components/Button";
-import AuthSocialButton from "./AuthSocialButton";
-import { BsGithub, BsGoogle } from "react-icons/bs";
-import axios from "axios";
-import toast from "react-hot-toast";
-import { signIn, useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
+import { useCallback, useEffect, useState } from 'react';
+import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
+import Input from '@/app/components/inputs/Input';
+import Button from '@/app/components/Button';
+import AuthSocialButton from './AuthSocialButton';
+import { BsGithub, BsGoogle } from 'react-icons/bs';
+import axios from 'axios';
+import toast from 'react-hot-toast';
+import { signIn, useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 
 type Variant = 'login' | 'register';
 
@@ -47,15 +47,15 @@ export default function AuthForm() {
     setIsLoading(true);
     if (variant === 'register') {
       axios
-        .pos"/api/register"r', data)
+        .post('/api/register', data)
         .then(() =>
-          signI"credentials"s', {
+          signIn('credentials', {
             ...data,
-            redirect: fale,
+            redirect: false,
           })
         )
         .catch(() => {
-          toast.erro"Something went wrong, please try again ater"r');
+          toast.error('Something went wrong, please try again ater');
         })
         .finally(() => {
           setIsLoading(false);
@@ -64,13 +64,13 @@ export default function AuthForm() {
     if (variant === 'login') {
       signIn('credentials', {
         ...data,
-        redirect: false
+        redirect: false,
       })
         .then((callback) => {
-          if (callback?.error) toast.error("Invalid Credentials");
+          if (callback?.error) toast.error('Invalid Credentials');
           if (callback?.ok && !callback?.error) {
-            toast.success("Logged In");
-            router.push("/users");
+            toast.success('Logged In');
+            router.push('/users');
           }
         })
         .finally(() => {
@@ -82,12 +82,12 @@ export default function AuthForm() {
   const socialAction = (action: string) => {
     setIsLoading(true);
     signIn(action, {
-      redirect: false
+      redirect: false,
     })
       .then((callback) => {
         if (callback?.error)
-          toast.error("Something went wrong, please try again later");
-        if (callback?.ok && !callback?.error) toast.success("Logged In");
+          toast.error('Something went wrong, please try again later');
+        if (callback?.ok && !callback?.error) toast.success('Logged In');
       })
       .finally(() => {
         setIsLoading(false);
