@@ -31,7 +31,7 @@ export const ConversationList: React.FC<ConversationListProps> = ({
       border-r
       border-gray-200
       `,
-        isOpen ? 'block w-full left-0' : 'hidden'
+        isOpen ? 'block w-full left-20' : 'hidden'
       )}
     >
       <div className='px-5'>
