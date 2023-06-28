@@ -3,12 +3,19 @@
 import { User } from '@prisma/client';
 import React from 'react';
 import Image from 'next/image';
+import clsx from 'clsx';
 
 interface AvatarProps {
+  image: string;
   user?: User;
+  statusInvisible?: boolean;
 }
 
-export const Avatar: React.FC<AvatarProps> = ({ user }) => {
+export const Avatar: React.FC<AvatarProps> = ({
+  image,
+  user,
+  statusInvisible,
+}) => {
   return (
     <div className='relative'>
       <div
@@ -24,13 +31,14 @@ export const Avatar: React.FC<AvatarProps> = ({ user }) => {
   '
       >
         <Image
-          src={user?.image || '/images/placeholder.jpg'}
+          src={image || user?.image || '/images/placeholder.jpg'}
           alt='Avatar'
           fill
         />
       </div>
       <span
-        className='
+        className={clsx(
+          `
          absolute
          block
          rounded-full
@@ -43,7 +51,9 @@ export const Avatar: React.FC<AvatarProps> = ({ user }) => {
          w-2
          md:h-3
          md:w-3
-       '
+       `,
+          statusInvisible ? 'hidden' : 'block'
+        )}
       />
     </div>
   );

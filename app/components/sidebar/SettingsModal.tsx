@@ -10,6 +10,7 @@ import Input from '@/app/components/inputs/Input';
 import Image from 'next/image';
 import { CldUploadButton } from 'next-cloudinary';
 import Button from '@/app/components/Button';
+import { Avatar } from '@/app/components/Avatar';
 
 interface SettingsModalProps {
   isOpen?: boolean;
@@ -86,14 +87,10 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                   Photo
                 </label>
                 <div className='mt-2 flex items-center gap-x-3'>
-                  <Image
-                    className='rounded-full'
-                    src={
-                      image || currentUser?.image || '/images/placeholder.jpg'
-                    }
-                    alt='user image'
-                    width={48}
-                    height={48}
+                  <Avatar
+                    statusInvisible={true}
+                    image={image}
+                    user={currentUser}
                   />
                   <CldUploadButton
                     options={{ maxFiles: 1 }}
