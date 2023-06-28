@@ -4,6 +4,7 @@ import { User } from '@prisma/client';
 import React from 'react';
 import Image from 'next/image';
 import clsx from 'clsx';
+import useActiveList from '@/app/hooks/useActiveList';
 
 interface AvatarProps {
   image?: string;
@@ -16,6 +17,8 @@ export const Avatar: React.FC<AvatarProps> = ({
   user,
   statusInvisible,
 }) => {
+  const { members } = useActiveList();
+  const isActive = members.indexOf(user?.email!) !== -1;
   return (
     <div className='relative'>
       <div
@@ -36,9 +39,10 @@ export const Avatar: React.FC<AvatarProps> = ({
           fill
         />
       </div>
-      <span
-        className={clsx(
-          `
+      {isActive && (
+        <span
+          className={clsx(
+            `
          absolute
          block
          rounded-full
@@ -52,9 +56,10 @@ export const Avatar: React.FC<AvatarProps> = ({
          md:h-3
          md:w-3
        `,
-          statusInvisible ? 'hidden' : 'block'
-        )}
-      />
+            statusInvisible ? 'hidden' : 'block'
+          )}
+        />
+      )}
     </div>
   );
 };
