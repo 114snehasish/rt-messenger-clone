@@ -6,7 +6,7 @@ import Image from 'next/image';
 import clsx from 'clsx';
 
 interface AvatarProps {
-  image: string;
+  image?: string;
   user?: User;
   statusInvisible?: boolean;
 }
